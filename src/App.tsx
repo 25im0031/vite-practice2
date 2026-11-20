@@ -42,6 +42,11 @@ function App() {
     )
   }
 
+  // 指定したIDの持ち物を削除する関数
+  const deleteItem = (id: number) => {
+    setItems(items.filter((item) => item.id !== id))
+  }
+
   return (
     <div className="min-h-screen bg-slate-100 py-8 px-4">
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow-md p-6">
@@ -70,27 +75,41 @@ function App() {
           {items.map((item) => (
             <li
               key={item.id}
-              onClick={() => toggleItem(item.id)}
-              className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition select-none ${
+              className={`flex items-center justify-between p-3 rounded-xl border transition select-none ${
                 item.checked
                   ? 'bg-emerald-50 border-emerald-200'
                   : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
               }`}
             >
-              <span
-                className={`font-medium ${
-                  item.checked ? 'line-through text-slate-400' : 'text-slate-700'
-                }`}
+              {/* 左側：クリックでチェック切り替え */}
+              <div
+                onClick={() => toggleItem(item.id)}
+                className="flex-1 flex items-center justify-between cursor-pointer pr-3"
               >
-                {item.name}
-              </span>
-              <span className="text-sm font-medium">
-                {item.checked ? (
-                  <span className="text-emerald-600">✅ 準備OK</span>
-                ) : (
-                  <span className="text-slate-400">⬜ 未確認</span>
-                )}
-              </span>
+                <span
+                  className={`font-medium ${
+                    item.checked ? 'line-through text-slate-400' : 'text-slate-700'
+                  }`}
+                >
+                  {item.name}
+                </span>
+                <span className="text-sm font-medium">
+                  {item.checked ? (
+                    <span className="text-emerald-600">✅ 準備OK</span>
+                  ) : (
+                    <span className="text-slate-400">⬜ 未確認</span>
+                  )}
+                </span>
+              </div>
+
+              {/* 右端：削除ボタン */}
+              <button
+                onClick={() => deleteItem(item.id)}
+                aria-label="削除"
+                className="px-2 py-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer"
+              >
+                🗑️
+              </button>
             </li>
           ))}
         </ul>
