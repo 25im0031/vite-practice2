@@ -10,7 +10,7 @@ type Item = {
 
 function App() {
   // 持ち物リストのデータ（最初はサンプルを入れておきます）
-  const [items, setItems] = useState<Item[]>([
+  const [items] = useState<Item[]>([
     { id: 1, name: 'スマートフォン', checked: true },
     { id: 2, name: '財布', checked: false },
     { id: 3, name: '家の鍵', checked: false },
