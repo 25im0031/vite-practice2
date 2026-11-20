@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 // 持ち物1つ分のデータの形
@@ -8,16 +8,30 @@ type Item = {
   checked: boolean
 }
 
+// 保存するときの合言葉（キー名）
+const STORAGE_KEY = 'belongings-checklist-items'
+
 function App() {
-  // 持ち物リストのデータ
-  const [items, setItems] = useState<Item[]>([
-    { id: 1, name: 'スマートフォン', checked: true },
-    { id: 2, name: '財布', checked: false },
-    { id: 3, name: '家の鍵', checked: false },
-  ])
+  // 最初にブラウザの保存領域からデータを読み込む（なければ初期値を使う）
+  const [items, setItems] = useState<Item[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      return JSON.parse(saved)
+    }
+    return [
+      { id: 1, name: 'スマートフォン', checked: true },
+      { id: 2, name: '財布', checked: false },
+      { id: 3, name: '家の鍵', checked: false },
+    ]
+  })
 
   // 入力欄の文字を覚えておくためのデータ
   const [inputText, setInputText] = useState('')
+
+  // itemsの中身が変わるたびに、自動でブラウザに保存する
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+  }, [items])
 
   // 新しい持ち物を追加する関数
   const addItem = (e: React.FormEvent) => {
