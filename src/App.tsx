@@ -16,6 +16,23 @@ function App() {
     { id: 3, name: '家の鍵', checked: false },
   ])
 
+  // 入力欄の文字を覚えておくためのデータ
+  const [inputText, setInputText] = useState('')
+
+  // 新しい持ち物を追加する関数
+  const addItem = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (inputText.trim() === '') return
+
+    const newItem: Item = {
+      id: Date.now(),
+      name: inputText.trim(),
+      checked: false,
+    }
+    setItems([...items, newItem])
+    setInputText('')
+  }
+
   // 項目がクリックされたときにチェック状態を反転させる関数
   const toggleItem = (id: number) => {
     setItems(
@@ -31,6 +48,23 @@ function App() {
         <h1 className="text-2xl font-bold text-slate-800 text-center mb-6">
           🎒 持ち物チェックリスト
         </h1>
+
+        {/* 持ち物を追加する入力フォーム */}
+        <form onSubmit={addItem} className="flex gap-2 mb-6">
+          <input
+            type="text"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="持ち物を入力..."
+            className="flex-1 px-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition cursor-pointer"
+          >
+            追加
+          </button>
+        </form>
 
         <ul className="space-y-3">
           {items.map((item) => (
