@@ -9,12 +9,21 @@ type Item = {
 }
 
 function App() {
-  // 持ち物リストのデータ（最初はサンプルを入れておきます）
-  const [items] = useState<Item[]>([
+  // 持ち物リストのデータ
+  const [items, setItems] = useState<Item[]>([
     { id: 1, name: 'スマートフォン', checked: true },
     { id: 2, name: '財布', checked: false },
     { id: 3, name: '家の鍵', checked: false },
   ])
+
+  // 項目がクリックされたときにチェック状態を反転させる関数
+  const toggleItem = (id: number) => {
+    setItems(
+      items.map((item) =>
+        item.id === id ? { ...item, checked: !item.checked } : item
+      )
+    )
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 py-8 px-4">
@@ -27,11 +36,26 @@ function App() {
           {items.map((item) => (
             <li
               key={item.id}
-              className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200"
+              onClick={() => toggleItem(item.id)}
+              className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition select-none ${
+                item.checked
+                  ? 'bg-emerald-50 border-emerald-200'
+                  : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+              }`}
             >
-              <span className="text-slate-700 font-medium">{item.name}</span>
-              <span className="text-sm text-slate-400">
-                {item.checked ? '✅ 準備OK' : '⬜ 未確認'}
+              <span
+                className={`font-medium ${
+                  item.checked ? 'line-through text-slate-400' : 'text-slate-700'
+                }`}
+              >
+                {item.name}
+              </span>
+              <span className="text-sm font-medium">
+                {item.checked ? (
+                  <span className="text-emerald-600">✅ 準備OK</span>
+                ) : (
+                  <span className="text-slate-400">⬜ 未確認</span>
+                )}
               </span>
             </li>
           ))}
